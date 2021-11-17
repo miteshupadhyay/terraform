@@ -55,7 +55,7 @@ pipeline {
         stage('Pushing Docker Image to ECR') {
          steps{
              script {
-                    sh "docker tag ${IMAGE_REPO_NAME}:${GIT_COMMIT_WITH_V} ${REPOSITORY_URI}: ${applicationName}-$GIT_COMMIT_WITH_V"
+                    sh "docker tag ${IMAGE_REPO_NAME}:${GIT_COMMIT_WITH_V} ${REPOSITORY_URI}:$GIT_COMMIT_WITH_V"
                     sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${GIT_COMMIT_WITH_V}"
              }
             }
