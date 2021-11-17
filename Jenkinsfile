@@ -1,4 +1,3 @@
-def GIT_COMMIT_WITH_V
 def dockerImage=""
 
 
@@ -21,6 +20,9 @@ pipeline {
         stage ("checkout from GIT") {
             steps {
                 git branch: 'main', credentialsId: 'Guthub_Cred', url: 'https://github.com/miteshupadhyay/terraform'
+                	script {
+                         GIT_COMMIT_WITH_V = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+                    }
             }
         }
 
@@ -35,7 +37,7 @@ pipeline {
         stage('Building Docker image') {
            steps{
               script {
-                   dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+                   dockerImage = docker.build "${IMAGE_REPO_NAME}:${GIT_COMMIT_WITH_V}"
                 }
               }
             }
