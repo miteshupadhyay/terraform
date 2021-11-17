@@ -90,49 +90,5 @@ pipeline {
                           }
                     }
                 }
-/*
-       stage ("Compile & Build") {
-            steps {
-                sh "mvn clean package"
-            }
         }
-
-        stage ("Push Docker Image to ECR") {
-            steps {
-                 sh 'terraform --version'
-            }
-        }
-        stage ("terraform Init") {
-            steps {
-                 sh "pwd"
-                  dir('terraform/vpc_infra') {
-                      sh "pwd"
-                      sh 'terraform init'
-                 }
-
-            }
-        }
-        stage ("terraform Plan") {
-            steps {
-                  dir('terraform/vpc_infra')
-                  {
-                        sh 'terraform plan -var-file="production.tfvars"'
-                  }
-            }
-        }
-        stage ("terraform Apply") {
-            steps {
-                  dir('terraform/vpc_infra')
-                  {
-                    sh 'terraform apply -auto-approve -var-file="production.tfvars"'
-                  }
-            }
-        }
-        stage ("Maven version") {
-            steps {
-                 sh 'mvn --version'
-            }
-        }
-        */
-    }
 }
