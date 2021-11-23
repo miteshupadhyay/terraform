@@ -19,7 +19,7 @@ pipeline {
                  }
             }
         }
-        stage ("terraform Destroy") {
+        stage ("terraform Destroy VPC") {
             steps {
                   dir('terraform/vpc_infra') 
                   {
@@ -27,6 +27,14 @@ pipeline {
                   }    
             }
         }
+         stage ("terraform Destroy ECS") {
+                    steps {
+                          dir('terraform/ecs_infra')
+                          {
+                            sh 'terraform destroy -auto-approve -var-file="production.tfvars"'
+                          }
+                    }
+                }
         stage ("Maven version") {
             steps {
                  sh 'mvn --version'
