@@ -61,30 +61,50 @@ pipeline {
                     }
                   }
 
-        // Terraform Initilization
+        /* // Terraform Initilization
         stage ("terraform Init") {
             steps {
                   dir('terraform/vpc_infra') {
                       sh 'terraform init'
                  }
-
             }
-        }
+        } */
 
         // Terraform Plan - VPC
          stage ("terraform Plan - VPC") {
                     steps {
                           dir('terraform/vpc_infra')
                           {
+                                sh 'terraform init'
                                 sh 'terraform plan -var-file="production.tfvars"'
                           }
                     }
                 }
+        // Terraform Plan - VPC
+                 stage ("terraform Plan - ECS") {
+                            steps {
+                                  dir('terraform/ecs_infra')
+                                  {
+                                        sh 'terraform init'
+                                        sh 'terraform plan -var-file="production.tfvars"'
+                                  }
+                            }
+                        }
+
 
          // Terraform Apply - VPC
          stage ("terraform Apply - VPC") {
                     steps {
                           dir('terraform/vpc_infra')
+                          {
+                            sh 'terraform apply -auto-approve -var-file="production.tfvars"'
+                          }
+                    }
+                }
+         // Terraform Apply - ECS
+         stage ("terraform Apply - ECS") {
+                    steps {
+                          dir('terraform/ecs_infra')
                           {
                             sh 'terraform apply -auto-approve -var-file="production.tfvars"'
                           }
