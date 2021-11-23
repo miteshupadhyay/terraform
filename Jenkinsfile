@@ -80,7 +80,16 @@ pipeline {
                           }
                     }
                 }
-        // Terraform Plan - VPC
+         // Terraform Apply - VPC
+                 stage ("terraform Apply - VPC") {
+                            steps {
+                                  dir('terraform/vpc_infra')
+                                  {
+                                    sh 'terraform apply -auto-approve -var-file="production.tfvars"'
+                                  }
+                            }
+                        }        
+        // Terraform Plan - ECS
                  stage ("terraform Plan - ECS") {
                             steps {
                                   dir('terraform/ecs_infra')
@@ -91,16 +100,6 @@ pipeline {
                             }
                         }
 
-
-         // Terraform Apply - VPC
-         stage ("terraform Apply - VPC") {
-                    steps {
-                          dir('terraform/vpc_infra')
-                          {
-                            sh 'terraform apply -auto-approve -var-file="production.tfvars"'
-                          }
-                    }
-                }
          // Terraform Apply - ECS
          stage ("terraform Apply - ECS") {
                     steps {
