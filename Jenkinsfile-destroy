@@ -35,6 +35,14 @@ pipeline {
                           }
                     }
                 }
+        stage ("terraform Destroy Tasks") {
+                    steps {
+                          dir('terraform/Task_Deployment')
+                          {
+                            sh 'terraform destroy -auto-approve -var-file="production.tfvars"'
+                          }
+                    }
+                }
         stage ("Maven version") {
             steps {
                  sh 'mvn --version'
