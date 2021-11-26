@@ -75,7 +75,7 @@ pipeline {
                     steps {
                           dir('terraform/vpc_infra')
                           {
-                                sh 'terraform init -migrate-state'
+                                sh 'terraform init'
                                 sh 'terraform plan -var-file="production.tfvars"'
                           }
                     }
@@ -94,7 +94,7 @@ pipeline {
                             steps {
                                   dir('terraform/ecs_infra')
                                   {
-                                        sh 'terraform init -migrate-state'
+                                        sh 'terraform init'
                                         sh 'terraform plan -var-file="production.tfvars"'
                                   }
                             }
@@ -115,7 +115,7 @@ pipeline {
                    steps {
                        dir('terraform/Task_Deployment')
                         {
-                         sh 'terraform init -migrate-state'
+                         sh 'terraform init'
                          sh 'terraform plan -var-file="production.tfvars"'
                         }
                   }
