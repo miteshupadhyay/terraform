@@ -1,9 +1,9 @@
 output "vpc_id" {
-  value = data.terraform_remote_state.infrastructure.outputs.vpc_id
+  value = data.terraform_remote_state.vpc-infra.outputs.vpc_id
 }
 
 output "vpc_cidr_block" {
-  value = data.terraform_remote_state.infrastructure.outputs.vpc_cidr_block
+  value = data.terraform_remote_state.vpc-infra.outputs.vpc_cidr_block
 }
 
 output "ecs_alb_listener_arn" {
@@ -27,9 +27,9 @@ output "ecs_domain_name" {
 }
 
 output "ecs_public_subnets" {
-  value = data.terraform_remote_state.infrastructure.outputs.public_subnets
+  value = data.terraform_remote_state.vpc-infra.outputs.public_subnets
 }
 
 output "ecs_private_subnets" {
-  value = data.terraform_remote_state.infrastructure.outputs.private_subnets
+  value = data.terraform_remote_state.vpc-infra.outputs.private_subnets
 }

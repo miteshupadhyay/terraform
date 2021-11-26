@@ -1,7 +1,7 @@
 ecs_cluster_name = "Production-ECS-Cluster"
 internet_cidr_blocks = "0.0.0.0/0"
 
-remote_state_key = "bank-service-dev"
+remote_state_key = "vpc-infra"
 remote_state_bucket = "bank-service-terraform-remote-state"
 
 # Service Variable

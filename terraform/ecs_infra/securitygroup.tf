@@ -5,7 +5,7 @@
 resource "aws_security_group" "ecs_alb_security_group" {
   name         = "${var.ecs_cluster_name}.${"-ALB-SG"}"
   description  = "This Security Group is for the ALB to Traffic for the ECS Cluster"
-  vpc_id       =  data.terraform_remote_state.infrastructure.outputs.vpc_id
+  vpc_id       =  data.terraform_remote_state.vpc-infra.outputs.vpc_id
 
   # Inbound Rule for Load Balancer
   ingress {

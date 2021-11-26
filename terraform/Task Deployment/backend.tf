@@ -16,6 +16,6 @@ terraform {
     region = "ap-south-1"
 
     # This key would be state file's File Name
-    key = "vpc-infra"
+    key = "bank-service.tfstate"
   }
 }

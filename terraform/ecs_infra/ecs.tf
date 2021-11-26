@@ -10,7 +10,7 @@ provider "aws" {
 # State File from S3 Bucket
 #-----------------------------------------------------------------------
 
-data "terraform_remote_state" "infrastructure" {
+data "terraform_remote_state" "vpc-infra" {
   backend = "s3"
   config = {
     region = var.region
@@ -36,7 +36,7 @@ resource "aws_alb" "ecs_cluster_alb" {
   name     = "${var.ecs_cluster_name}${"-ALB"}"
   internal = false // because we want this ALB to be available through internet , this isn't a private ALB
   security_groups = [aws_security_group.ecs_alb_security_group.id]
-  subnets = split(",",join(",",data.terraform_remote_state.infrastructure.outputs.public_subnets))
+  subnets = split(",",join(",",data.terraform_remote_state.vpc-infra.outputs.public_subnets))
 
   tags = {
     Name = "${var.ecs_cluster_name}.${" ALB"}"
@@ -72,7 +72,7 @@ resource "aws_alb_target_group" "ecs_default_target_group" {
   name     = "${var.ecs_cluster_name}-TG"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = data.terraform_remote_state.infrastructure.outputs.vpc_id
+  vpc_id   = data.terraform_remote_state.vpc-infra.outputs.vpc_id
 
   tags = {
     Name = "${var.ecs_cluster_name}-TG"
