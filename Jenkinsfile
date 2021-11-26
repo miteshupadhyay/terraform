@@ -80,15 +80,15 @@ pipeline {
                           }
                     }
                 }
-         // Terraform Apply - VPC
-                 stage ("terraform Apply - VPC") {
+         // VPC CreationC
+                 stage ("VPC Creation") {
                             steps {
                                   dir('terraform/vpc_infra')
                                   {
                                     sh 'terraform apply -auto-approve -var-file="production.tfvars"'
                                   }
                             }
-                        }        
+                        }
         // Terraform Plan - ECS
                  stage ("terraform Plan - ECS") {
                             steps {
@@ -100,12 +100,32 @@ pipeline {
                             }
                         }
 
-         // Terraform Apply - ECS
-         stage ("terraform Apply - ECS") {
+         // ECS Setup
+         stage ("ECS Setup") {
                     steps {
                           dir('terraform/ecs_infra')
                           {
                             sh 'terraform apply -auto-approve -var-file="production.tfvars"'
+                          }
+                    }
+                }
+
+         // ECS Task Setup
+         stage ("terraform Plan - Task Setup") {
+                   steps {
+                       dir('terraform/Task_Deployment')
+                        {
+                         sh 'terraform init'
+                         sh 'terraform plan -var-file="production.tfvars"'
+                        }
+                  }
+             }
+         // ECS Task Creation
+         stage ("Task Setup and Deployment") {
+                    steps {
+                          dir('terraform/Task_Deployment')
+                          {
+                            sh 'terraform apply -auto-approve -var-file="production.tfvars" -var docker_image_url=${REPOSITORY_URI}:$GIT_COMMIT_WITH_V'
                           }
                     }
                 }
