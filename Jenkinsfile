@@ -61,15 +61,6 @@ pipeline {
                     }
                   }
 
-        /* // Terraform Initilization
-        stage ("terraform Init") {
-            steps {
-                  dir('terraform/vpc_infra') {
-                      sh 'terraform init'
-                 }
-            }
-        } */
-
         // Terraform Plan - VPC
 
          stage ("terraform Plan - VPC") {
