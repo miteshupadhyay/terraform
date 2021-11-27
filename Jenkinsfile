@@ -31,7 +31,7 @@ pipeline {
                 sh "mvn clean package"
             }
         }
-
+/*
         // Building Docker image
         stage('Building Docker image') {
            steps{
@@ -71,7 +71,7 @@ pipeline {
         } */
 
         // Terraform Plan - VPC
-        /*
+
          stage ("terraform Plan - VPC") {
                     steps {
                           dir('terraform/vpc_infra')
