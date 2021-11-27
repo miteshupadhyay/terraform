@@ -31,7 +31,7 @@ pipeline {
                 sh "mvn clean package"
             }
         }
-/*
+
         // Building Docker image
         stage('Building Docker image') {
            steps{
@@ -101,7 +101,7 @@ pipeline {
                           }
                     }
                 }
-*/
+
          // ECS Task Setup
          stage ("terraform Plan - Task Setup") {
                    steps {
@@ -117,7 +117,7 @@ pipeline {
                     steps {
                           dir('terraform/Task_Deployment')
                           {
-                            sh 'terraform apply -auto-approve -var docker_image_url="${REPOSITORY_URI}:$GIT_COMMIT_WITH_V" -var-file="production.tfvars"'
+                            sh 'terraform apply -auto-approve -var-file="production.tfvars" -var docker_image_url="${REPOSITORY_URI}:$GIT_COMMIT_WITH_V"'
                           }
                     }
                 }
