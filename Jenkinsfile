@@ -108,7 +108,7 @@ pipeline {
                        dir('terraform/Task_Deployment')
                         {
                          sh 'terraform init'
-                         sh 'terraform plan -var-file="production.tfvars"'
+                         sh 'terraform plan -var-file="production.tfvars" -var docker_image_url="${REPOSITORY_URI}:$GIT_COMMIT_WITH_V'
                         }
                   }
              }
