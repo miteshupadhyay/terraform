@@ -15,7 +15,7 @@ pipeline {
          stage ("terraform Init") {
             steps {
                   dir('terraform/vpc_infra') {
-                      sh 'terraform init'
+                      sh 'terraform init -migrate-state'
                  }
             }
         }
@@ -31,6 +31,7 @@ pipeline {
                     steps {
                           dir('terraform/ecs_infra')
                           {
+                            sh 'terraform init -migrate-state'
                             sh 'terraform destroy -auto-approve -var-file="production.tfvars"'
                           }
                     }
@@ -39,6 +40,7 @@ pipeline {
                     steps {
                           dir('terraform/Task_Deployment')
                           {
+                            sh 'terraform init -migrate-state'
                             sh 'terraform destroy -auto-approve -var-file="production.tfvars"'
                           }
                     }
