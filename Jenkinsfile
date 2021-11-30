@@ -63,7 +63,7 @@ pipeline {
 
         // Terraform Plan - VPC
 
-        /*  stage ("terraform Plan - VPC") {
+          stage ("terraform Plan - VPC") {
                     steps {
                           dir('terraform/vpc_infra')
                           {
@@ -101,7 +101,7 @@ pipeline {
                           }
                     }
                 }
- */
+ 
          // ECS Task Setup
          stage ("terraform Plan - Task Setup") {
                    steps {
