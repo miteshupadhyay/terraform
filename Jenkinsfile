@@ -63,7 +63,7 @@ pipeline {
 
         // Terraform Plan - VPC
 
-         stage ("terraform Plan - VPC") {
+        /*  stage ("terraform Plan - VPC") {
                     steps {
                           dir('terraform/vpc_infra')
                           {
@@ -101,14 +101,14 @@ pipeline {
                           }
                     }
                 }
-
+ */
          // ECS Task Setup
          stage ("terraform Plan - Task Setup") {
                    steps {
                        dir('terraform/Task_Deployment')
                         {
                          sh 'terraform init'
-                         sh 'terraform plan -var-file="production.tfvars" -var docker_image_url="${IMAGE_REPO_NAME}:${GIT_COMMIT_WITH_V}"'
+                         sh 'terraform plan -var-file="production.tfvars" --var docker_image_url="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${GIT_COMMIT_WITH_V}"'
                         }
                   }
              }
