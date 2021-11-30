@@ -8,7 +8,6 @@ pipeline {
         AWS_DEFAULT_REGION="ap-south-1"
         IMAGE_REPO_NAME="bank-service-api"
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
-        TFVARS_FILE_NAME="production.tfvars"
     }
     tools {
         terraform 'Terraform v1.0.11'
@@ -62,28 +61,69 @@ pipeline {
                     }
                   }
 
+        // Terraform Plan - VPC
+
+        /*  stage ("terraform Plan - VPC") {
+                    steps {
+                          dir('terraform/vpc_infra')
+                          {
+                                sh 'terraform init'
+                                sh 'terraform plan -var-file="production.tfvars"'
+                          }
+                    }
+                }
+         // VPC CreationC
+                 stage ("VPC Creation") {
+                            steps {
+                                  dir('terraform/vpc_infra')
+                                  {
+                                    sh 'terraform apply -auto-approve -var-file="production.tfvars"'
+                                  }
+                            }
+                        }
+        // Terraform Plan - ECS
+                 stage ("terraform Plan - ECS") {
+                            steps {
+                                  dir('terraform/ecs_infra')
+                                  {
+                                        sh 'terraform init'
+                                        sh 'terraform plan -var-file="production.tfvars"'
+                                  }
+                            }
+                        }
+
+         // ECS Setup
+         stage ("ECS Setup") {
+                    steps {
+                          dir('terraform/ecs_infra')
+                          {
+                            sh 'terraform apply -auto-approve -var-file="production.tfvars"'
+                          }
+                    }
+                }
+ */
          // ECS Task Setup
          stage ("terraform Plan - Task Setup") {
                    steps {
                        dir('terraform/Task_Deployment')
                         {
-                         sh 'terraform init'
-                         echo 'Check Versionss--------------------->'
-                         echo GIT_COMMIT_WITH_V
-                         script{
-                            sh "terraform plan -var-file='production.tfvars' -var docker_image_url=${REPOSITORY_URI}:$GIT_COMMIT_WITH_V"
-                         }
+                        sh 'terraform init'
+                        script{
+                               sh "terraform plan -var-file='production.tfvars' -var docker_image_url=${REPOSITORY_URI}:$GIT_COMMIT_WITH_V"
+                           }
                         }
                   }
              }
          // ECS Task Creation
-    /*      stage ("Task Setup and Deployment") {
+         stage ("Task Setup and Deployment") {
                     steps {
                           dir('terraform/Task_Deployment')
                           {
-                            sh 'terraform apply -auto-approve -var-file="production.tfvars" -var docker_image_url="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:a3deb11"'
-                          }
+                        script{
+                           sh "terraform apply -auto-approve -var-file='production.tfvars' -var docker_image_url=${REPOSITORY_URI}:$GIT_COMMIT_WITH_V"
+                         }
+                      }
                     }
-                } */
+                }
         }
 }
