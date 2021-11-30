@@ -5,8 +5,10 @@ variable "region" {
 variable "remote_state_bucket" {}
 variable "remote_state_key" {}
 variable "ecs_service_name" {}
-variable "docker_image_url" {}
+variable "docker_image_url" {
+  type = string
+}
 variable "memory" {}
 variable "docker_container_port" {}
 variable "spring_profile" {}
-variable desired_task_number{}
+variable "desired_task_number" {}

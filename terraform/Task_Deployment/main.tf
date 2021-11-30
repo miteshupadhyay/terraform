@@ -2,11 +2,11 @@ provider "aws" {
   region = var.region
 }
 
-data "terraform_remote_state" "ecs-infra"{
+data "terraform_remote_state" "ecs-infra" {
   backend = "s3"
 
   config = {
-    key = var.remote_state_key
+    key    = var.remote_state_key
     bucket = var.remote_state_bucket
     region = var.region
   }
@@ -18,15 +18,15 @@ data "terraform_remote_state" "ecs-infra"{
 #---------------------------------------------------------------------------------------
 
 data "template_file" "ecs_task_definition_template" {
-  template = file("./task_definition.json")
+  template = file("task_definition.json")
   vars = {
-    task_definition_name=var.ecs_service_name
-    ecs_service_name=var.ecs_service_name
-    docker_image_url=var.docker_image_url
-    memory=var.memory
-    docker_container_port=var.docker_container_port
-    spring_profile=var.spring_profile
-    region=var.region
+    task_definition_name  = var.ecs_service_name
+    ecs_service_name      = var.ecs_service_name
+    docker_image_url      = var.docker_image_url
+    memory                = var.memory
+    docker_container_port = var.docker_container_port
+    spring_profile        = var.spring_profile
+    region                = var.region
   }
 }
 
@@ -35,15 +35,15 @@ data "template_file" "ecs_task_definition_template" {
 # is has been read. Now create actual task definition by using above definition template.
 #----------------------------------------------------------------------------------
 
-resource "aws_ecs_task_definition" "bank-service-task-definition" {
-  container_definitions = data.template_file.ecs_task_definition_template.rendered
-  family                = var.ecs_service_name
-  cpu                   = 512
-  memory                = var.memory
+resource "aws_ecs_task_definition" "bankserviceapp-task-definition" {
+  container_definitions    = data.template_file.ecs_task_definition_template.rendered
+  family                   = var.ecs_service_name
+  cpu                      = 512
+  memory                   = var.memory
   requires_compatibilities = ["FARGATE"]
-  network_mode          = "awsvpc"
-  execution_role_arn    = aws_iam_role.fargate_iam_role.arn
-  task_role_arn         = aws_iam_role.fargate_iam_role.arn
+  network_mode             = "awsvpc"
+  execution_role_arn       = aws_iam_role.fargate_iam_role.arn
+  task_role_arn            = aws_iam_role.fargate_iam_role.arn
 }
 
 #---------------------------------------------
@@ -51,7 +51,7 @@ resource "aws_ecs_task_definition" "bank-service-task-definition" {
 #---------------------------------------------
 
 resource "aws_iam_role" "fargate_iam_role" {
-  name = "${var.ecs_service_name}${"-IAM-Role"}"
+  name               = "${var.ecs_service_name}${"-IAM-Role"}"
   assume_role_policy = <<EOF
 {
 "Version": "2012-10-17",
@@ -73,7 +73,7 @@ EOF
 #-----------------------------------------------
 
 resource "aws_iam_role_policy" "fargate_iam_role_policy" {
-  name = "${var.ecs_service_name}${"-IAM-Role-Policy"}"
+  name   = "${var.ecs_service_name}${"-IAM-Role-Policy"}"
   role   = aws_iam_role.fargate_iam_role.id
   policy = <<EOF
 {
@@ -156,16 +156,16 @@ resource "aws_alb_target_group" "ecs_app_target_group" {
 
 resource "aws_ecs_service" "ecs_service" {
   name            = var.ecs_service_name
-  task_definition = var.ecs_service_name
+  task_definition = aws_ecs_task_definition.bankserviceapp-task-definition.arn
   desired_count   = var.desired_task_number
   cluster         = data.terraform_remote_state.ecs-infra.outputs.ecs_cluster_name.name
   launch_type     = "FARGATE"
 
   network_configuration {
     # subnets           = [data.terraform_remote_state.platform.outputs.ecs_public_subnets]
-    subnets           = data.terraform_remote_state.ecs-infra.outputs.ecs_public_subnets
-    security_groups   = [aws_security_group.app_security_group.id]
-    assign_public_ip  = true
+    subnets          = data.terraform_remote_state.ecs-infra.outputs.ecs_public_subnets
+    security_groups  = [aws_security_group.app_security_group.id]
+    assign_public_ip = true
   }
 
   load_balancer {
