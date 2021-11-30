@@ -67,18 +67,21 @@ pipeline {
                        dir('terraform/Task_Deployment')
                         {
                          sh 'terraform init'
+                         echo 'Check Version--------------------->'
+                         echo GIT_COMMIT_WITH_V
+                         echo $GIT_COMMIT_WITH_V
                          sh 'terraform plan -var-file="production.tfvars" -var "docker_image_url=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${GIT_COMMIT_WITH_V}"'
                         }
                   }
              }
          // ECS Task Creation
-         stage ("Task Setup and Deployment") {
+    /*      stage ("Task Setup and Deployment") {
                     steps {
                           dir('terraform/Task_Deployment')
                           {
                             sh 'terraform apply -auto-approve -var-file="production.tfvars" -var docker_image_url="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:a3deb11"'
                           }
                     }
-                }
+                } */
         }
 }
