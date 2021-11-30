@@ -17,18 +17,18 @@ pipeline {
                 git branch: 'main', credentialsId: 'Guthub_Cred', url: 'https://github.com/miteshupadhyay/terraform'
             }
         }
-         stage ("terraform Init") {
+       /*  stage ("terraform Init") {
             steps {
                   dir('terraform/vpc_infra') {
-                      sh 'terraform init'
+                      sh 'terraform init -migrate-state'
                  }
             }
         }
-        stage ("terraform Destroy Tasks") {
+*/        stage ("terraform Destroy Tasks") {
                             steps {
                                   dir('terraform/Task_Deployment')
                                   {
-                                    sh 'terraform init'
+                                    sh 'terraform init -migrate-state'
                                     sh 'sh 'terraform plan -var-file="production.tfvars" -var docker_image_url="${REPOSITORY_URI}"'
                                   }
                             }
@@ -37,7 +37,7 @@ pipeline {
                             steps {
                                   dir('terraform/ecs_infra')
                                   {
-                                    sh 'terraform init'
+                                    sh 'terraform init -migrate-state'
                                     sh 'terraform destroy -auto-approve -var-file="production.tfvars"'
                                   }
                             }
@@ -46,6 +46,7 @@ pipeline {
             steps {
                   dir('terraform/vpc_infra') 
                   {
+                    sh 'terraform init -migrate-state'
                     sh 'terraform destroy -auto-approve -var-file="production.tfvars"'
                   }    
             }
