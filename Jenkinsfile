@@ -76,7 +76,7 @@ pipeline {
                     steps {
                           dir('terraform/Task_Deployment')
                           {
-                            sh 'terraform apply -auto-approve -var-file="production.tfvars" -var docker_image_url="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${GIT_COMMIT_WITH_V}"'
+                            sh 'terraform apply -auto-approve -var-file="production.tfvars" -var docker_image_url="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:a3deb11"'
                           }
                     }
                 }
