@@ -28,7 +28,7 @@ pipeline {
                             steps {
                                   dir('terraform/Task_Deployment')
                                   {
-                                    sh 'terraform init -reconfigure'
+                                    sh 'terraform init'
                                     sh 'sh 'terraform plan -var-file="production.tfvars" -var docker_image_url="${REPOSITORY_URI}"'
                                   }
                             }
@@ -46,7 +46,7 @@ pipeline {
             steps {
                   dir('terraform/vpc_infra') 
                   {
-                    sh 'terraform init -reconfigure'
+                    sh 'terraform init -migrate-state'
                     sh 'terraform destroy -auto-approve -var-file="production.tfvars"'
                   }    
             }
