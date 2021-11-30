@@ -8,6 +8,7 @@ pipeline {
         AWS_DEFAULT_REGION="ap-south-1"
         IMAGE_REPO_NAME="bank-service-api"
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+        TFVARS_FILE_NAME="production.tfvars"
     }
     tools {
         terraform 'Terraform v1.0.11'
@@ -70,7 +71,7 @@ pipeline {
                          echo 'Check Versionss--------------------->'
                          echo GIT_COMMIT_WITH_V
                          script {
-                         sh "terraform plan -var-file="'production.tfvars'" -var docker_image_url=${REPOSITORY_URI}:$GIT_COMMIT_WITH_V"
+                         sh "terraform plan -var-file= ${TFVARS_FILE_NAME} -var docker_image_url=${REPOSITORY_URI}:$GIT_COMMIT_WITH_V"
                          }
                         }
                   }
