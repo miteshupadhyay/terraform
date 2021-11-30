@@ -69,7 +69,7 @@ pipeline {
                          sh 'terraform init'
                          echo 'Check Versionss--------------------->'
                          echo GIT_COMMIT_WITH_V
-                         sh 'terraform plan -var-file="production.tfvars" -var docker_image_url=${IMAGE_REPO_NAME}:GIT_COMMIT_WITH_V'
+                         sh 'terraform plan -var-file="production.tfvars" -var docker_image_url="${IMAGE_REPO_NAME}:${GIT_COMMIT_WITH_V}"'
                         }
                   }
              }
