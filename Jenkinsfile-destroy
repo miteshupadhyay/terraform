@@ -1,6 +1,11 @@
 pipeline {
     agent any
-    
+    environment{
+            AWS_ACCOUNT_ID="819754052673"
+            AWS_DEFAULT_REGION="ap-south-1"
+            IMAGE_REPO_NAME="bank-service-api"
+            REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+        }
     tools {
         terraform 'Terraform v1.0.11'
         maven '3.8.3'
@@ -15,10 +20,28 @@ pipeline {
          stage ("terraform Init") {
             steps {
                   dir('terraform/vpc_infra') {
-                      sh 'terraform init -migrate-state'
+                      sh 'terraform init'
                  }
             }
         }
+        stage ("terraform Destroy Tasks") {
+                            steps {
+                                  dir('terraform/Task_Deployment')
+                                  {
+                                    sh 'terraform init'
+                                    sh 'sh 'terraform plan -var-file="production.tfvars" -var docker_image_url="${REPOSITORY_URI}"'
+                                  }
+                            }
+                        }
+        stage ("terraform Destroy ECS") {
+                            steps {
+                                  dir('terraform/ecs_infra')
+                                  {
+                                    sh 'terraform init'
+                                    sh 'terraform destroy -auto-approve -var-file="production.tfvars"'
+                                  }
+                            }
+                        }
         stage ("terraform Destroy VPC") {
             steps {
                   dir('terraform/vpc_infra') 
@@ -27,24 +50,8 @@ pipeline {
                   }    
             }
         }
-         stage ("terraform Destroy ECS") {
-                    steps {
-                          dir('terraform/ecs_infra')
-                          {
-                            sh 'terraform init -migrate-state'
-                            sh 'terraform destroy -auto-approve -var-file="production.tfvars"'
-                          }
-                    }
-                }
-        stage ("terraform Destroy Tasks") {
-                    steps {
-                          dir('terraform/Task_Deployment')
-                          {
-                            sh 'terraform init -migrate-state'
-                            sh 'terraform destroy -auto-approve -var-file="production.tfvars"'
-                          }
-                    }
-                }
+
+
         stage ("Maven version") {
             steps {
                  sh 'mvn --version'
