@@ -194,3 +194,11 @@ resource "aws_alb_listener_rule" "ecs_alb_listener_rule" {
     }
   }
 }
+
+#---------------------------------------------------------
+# Now let's create the Log Group for the application logs
+#---------------------------------------------------------
+
+resource "aws_cloudwatch_log_group" "bankserviceapp_log_group" {
+  name = "${var.ecs_service_name}-LogGroup"
+}

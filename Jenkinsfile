@@ -101,7 +101,6 @@ pipeline {
                           }
                     }
                 }
- 
          // ECS Task Setup
          stage ("terraform Plan - Task Setup") {
                    steps {
